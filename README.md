@@ -19,8 +19,8 @@ It could work differently if you use Plausible cloud, so to know if it works the
 
 **Steps to do:**
 1. Open Plausible, settings and create a new API key.
-2. Create a new HA input_text helper and store the API key there.
-3. Change the resource (2x) to your own IP address where you host Plausible.
+2. Create a new HA input_text helper and store the API key there. (you could also create a secret instead)
+3. Change the resource (2x) to your own IP address (or domain name) where you host Plausible.
 4. Change siteid to your own website domain name.
 5. It's now set to 'period=day' but you can change it to something else if you want: see the available options [here](https://plausible.io/docs/stats-api#time-periods).
 
