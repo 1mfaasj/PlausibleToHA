@@ -27,7 +27,7 @@ sensor:
   unique_id: plausible_api
   value_template: 'Active'
 
-####general stats
+#general stats
 template:
   - sensor:
     - name: "mysite bounce percentage today"
@@ -102,7 +102,7 @@ template:
       availability: >-
         {{ state_attr('sensor.plausible_api_mysite', 'results')['visits']['value'] is not none }}
 
-###API checks
+#API checks
   - sensor:
     - name: "mysite API Clickhouse"
       unique_id: plausible_api_clickhouse
