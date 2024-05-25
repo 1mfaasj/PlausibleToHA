@@ -79,7 +79,7 @@ template:
       unique_id: mysite_visit_duration_today_minutes
       state: >-
         {{ states('sensor.mysite_visit_duration_today_seconds') | int(0) | timestamp_custom('%M', false) }}
-      unit_of_measurement: "m"
+      unit_of_measurement: "min"
       device_class: duration
       availability: >-
         {{ states('sensor.mysite_visit_duration_today_seconds') is not none }}
