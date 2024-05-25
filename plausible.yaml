@@ -1,0 +1,126 @@
+sensor:
+- platform: rest
+  scan_interval: 300
+  resource: "http://192.168.1.1:8880/api/v1/stats/aggregate?site_id=mysite.com&period=day&metrics=visitors,visits,pageviews,views_per_visit,bounce_rate,visit_duration,events"
+  headers:
+    Authorization: >
+      Bearer {{ states("input_text.plausible") }}
+  json_attributes:
+    - results
+  method: GET
+  name: "Plausible API mysite"
+  unique_id: plausible_api_mysite
+  value_template: 'Active' 
+
+- platform: rest
+  scan_interval: 300
+  resource: "http://192.168.1.1:8880/api/health"
+  headers:
+    Authorization: >
+      Bearer {{ states("input_text.plausible") }}
+  json_attributes:
+    - clickhouse
+    - postgres
+    - sites_cache
+  method: GET
+  name: "Plausible API"
+  unique_id: plausible_api
+  value_template: 'Active'
+
+####general stats
+template:
+  - sensor:
+    - name: "mysite bounce percentage today"
+      unique_id: mysite_bounce_percentage_today
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['bounce_rate']['value'] }}
+      unit_of_measurement: "%"
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['bounce_rate']['value'] is not none }}
+
+  - sensor:
+    - name: "mysite events today"
+      unique_id: mysite_events_today
+      unit_of_measurement: "x"
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['events']['value'] }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['events']['value'] is not none }}
+
+  - sensor:
+    - name: "mysite page views today"
+      unique_id: mysite_page_views_today
+      unit_of_measurement: "x"
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['pageviews']['value'] }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['pageviews']['value'] is not none }}
+
+  - sensor:
+    - name: "mysite visitor views today"
+      unique_id: mysite_visitor_views_vandaag
+      unit_of_measurement: "x"
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['views_per_visit']['value'] }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['views_per_visit']['value'] is not none }}
+
+  - sensor:
+    - name: "mysite visit duration today seconds"
+      unique_id: mysite_visit_duration_today_seconds
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['visit_duration']['value'] }}
+      unit_of_measurement: "s"
+      device_class: duration
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['visit_duration']['value'] is not none }}
+  - sensor:
+    - name: "mysite visit duration today minutes"
+      unique_id: mysite_visit_duration_today_minutes
+      state: >-
+        {{ states('sensor.mysite_visit_duration_today_seconds') | int(0) | timestamp_custom('%M', false) }}
+      unit_of_measurement: "m"
+      device_class: duration
+      availability: >-
+        {{ states('sensor.mysite_visit_duration_today_seconds') is not none }}
+
+  - sensor:
+    - name: "mysite unique visitors today"
+      unique_id: mysite_unique_visitors_today
+      unit_of_measurement: "x"
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['visitors']['value'] }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['visitors']['value'] is not none }}
+
+  - sensor:
+    - name: "mysite visitor sessions today"
+      unique_id: mysite_visitor_sessions_today
+      unit_of_measurement: "x"
+      state: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['visits']['value'] }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api_mysite', 'results')['visits']['value'] is not none }}
+
+###API checks
+  - sensor:
+    - name: "mysite API Clickhouse"
+      unique_id: plausible_api_clickhouse
+      state: >-
+        {{ state_attr('sensor.plausible_api', 'clickhouse') }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api', 'clickhouse') is not none }}
+  - sensor:
+    - name: "mysite API Postgres"
+      unique_id: plausible_api_postgres
+      state: >-
+        {{ state_attr('sensor.plausible_api', 'postgres') }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api', 'postgres') is not none }}
+  - sensor:
+    - name: "mysite API Sites Cache"
+      unique_id: plausible_api_sites_cache
+      state: >-
+        {{ state_attr('sensor.plausible_api', 'sites_cache') }}
+      availability: >-
+        {{ state_attr('sensor.plausible_api', 'sites_cache') is not none }}
