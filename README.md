@@ -26,5 +26,5 @@ It could work differently if you use Plausible cloud, so to know if it works the
 
 Have fun!
 
-More info about the API: https://plausible.io/docs/stats-api
-The related topic on HA community: https://community.home-assistant.io/t/plausible-data-into-ha-website-analytics/732653
+- More info about the API: https://plausible.io/docs/stats-api
+- The related topic on HA community: https://community.home-assistant.io/t/plausible-data-into-ha-website-analytics/732653
