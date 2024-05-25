@@ -14,7 +14,7 @@ I'm using it in a docker image (fully self hosted).
 It could work differently if you use Plausible cloud, so to know if it works the same way, you can find out for yourself.
 
 **Features:**
-- Retrieve the amount of (unique) visitors, pageviews, bounce rate, visit duration etc. from your website(s).
+- Retrieve the amount of (unique) visitors, pageviews, bounce rate, visit duration etc. from your website(s). Usecases for HA: not only create beautiful graphs, but also create alert notifications when you reach a certain amount of visitors (milestone) or when it’s declining. Or send data to Grafana (or Google sheets) easily so you can store data for a longer period.
 - Perform api checks to see whether the Plausible api/app, clickhouse and database (postgres) are running as expected.
 
 **Steps to do:**
@@ -27,3 +27,4 @@ It could work differently if you use Plausible cloud, so to know if it works the
 Have fun!
 
 More info about the API: https://plausible.io/docs/stats-api
+The related topic on HA community: https://community.home-assistant.io/t/plausible-data-into-ha-website-analytics/732653
